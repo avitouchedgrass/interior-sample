@@ -1,6 +1,17 @@
 "use client";
 
-import { toast } from "sonner";
+const WHATSAPP_NUMBER = "918594885928";
+const DEFAULT_MESSAGE = "Hey! I liked the website you made, I would like to get mine done similarly.";
+
+export function getWhatsAppUrl(text: string = DEFAULT_MESSAGE) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+}
+
+export function bookOnWhatsApp(text?: string | unknown) {
+  const message = typeof text === "string" && text.trim() ? text : DEFAULT_MESSAGE;
+  const url = getWhatsAppUrl(message);
+  window.open(url, "_blank", "noopener,noreferrer");
+}
 
 export function WhatsAppIcon({ className }: { className?: string }) {
   return (
@@ -10,22 +21,25 @@ export function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-export function bookOnWhatsApp() {
-  toast("Concept experience", {
-    description:
-      "WhatsApp booking is not wired up yet — this is a conceptual representation by Avi.",
-  });
-}
-
-export function WhatsAppPill({ className = "", label = "Book on WhatsApp" }: { className?: string; label?: string }) {
+export function WhatsAppPill({
+  className = "",
+  label = "Book on WhatsApp",
+  message = DEFAULT_MESSAGE,
+}: {
+  className?: string;
+  label?: string;
+  message?: string;
+}) {
   return (
-    <button
-      onClick={bookOnWhatsApp}
+    <a
+      href={getWhatsAppUrl(message)}
+      target="_blank"
+      rel="noopener noreferrer"
       data-cursor
       className={`group inline-flex h-14 items-center gap-3 rounded-full bg-whatsapp px-7 text-[13px] font-semibold uppercase tracking-[0.18em] text-[#07230f] transition-all duration-500 hover:brightness-110 active:scale-95 ${className}`}
     >
       <WhatsAppIcon className="h-5 w-5 transition-transform duration-500 group-hover:-rotate-12 group-hover:scale-110" />
       {label}
-    </button>
+    </a>
   );
 }

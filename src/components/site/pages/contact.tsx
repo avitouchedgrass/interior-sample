@@ -18,10 +18,16 @@ export default function Contact({ navigate }: { navigate: (r: RouteId) => void }
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast("Concept form", {
-      description:
-        "This is a conceptual representation by Avi — the form isn't wired to a mailbox yet.",
-    });
+    const parts = [
+      "Hey! I liked the website you made, I would like to get mine done similarly.",
+    ];
+    if (name.trim()) parts.push(`Name: ${name.trim()}`);
+    if (email.trim()) parts.push(`Email: ${email.trim()}`);
+    if (type) parts.push(`Project type: ${type}`);
+    if (message.trim()) parts.push(`Brief: ${message.trim()}`);
+
+    toast.success("Opening WhatsApp with your brief...");
+    bookOnWhatsApp(parts.join("\n"));
   };
 
   const field =
@@ -115,7 +121,7 @@ export default function Contact({ navigate }: { navigate: (r: RouteId) => void }
         <div className="space-y-8">
           <Reveal delay={0.1}>
             <motion.button
-              onClick={bookOnWhatsApp}
+              onClick={() => bookOnWhatsApp()}
               data-cursor
               className="group relative block w-full overflow-hidden rounded-sm border border-whatsapp/40 bg-[#0f1a12] p-7 text-left md:p-8"
               whileHover={{ y: -4 }}
